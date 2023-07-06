@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/logo.png" type="image/png" />
+    <title>Video Call</title>
+    <link rel="stylesheet" href="/static/call.css">
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 24px;
+            min-height: 90vh;
+        }
+    </style>
+
+    <script>
+        let myName;
+    </script>
+</head>
+
+<body>
+  
+    {% comment %} Get data for username and chatbox name{% endcomment %}
+    {{ request.user.username|json_script:"user_username" }}
+<div>
+            <!-- to display current login user information  -->
+            <div id="userInfo">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 300px;">
+                    <h1>Hello, <span id="nameHere"></span></h1>
+                </div>
+
+            </div>
+
+            <!-- to make a call with name -->
+<button onclick="call()" id="call" data-reciver-name="tan" >Call</button>
+
+            <!-- to show incommming call and accept -->
+            <div id="answer">
+                <div class="incomingWrapper">
+                    <div class="itemWrapper">
+                        <h2>Incomming Call</h2>
+                    </div>
+                    <div class="itemWrapper">
+                        <img id="profileImageA" style="padding: 30px; width: 140px; height: 140px;"
+                            src="/static/profile.png" alt="">
+                    </div>
+                    <div class="itemWrapper">
+                        <h2 style="line-height: 0px;"><span id="callerName"></span></h2>
+                    </div>
+                    <div class="itemWrapper" style="display: flex; flex-direction: row; margin-bottom: 20px;">
+                        <button class="actionButton" onclick="answer()">Answer</button>
+                        <button class="actionButton" onclick="reject()">Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- to show outgoing call -->
+            <div id="calling">
+                <div class="incomingWrapper">
+                    <div class="itemWrapper">
+                        <h2>Calling</h2>
+                    </div>
+                    <div class="itemWrapper">
+                        <img id="profileImageCA" style="padding: 30px; width: 140px; height: 140px;"
+                            src="/static/profile.png" alt="">
+                    </div>
+                    <div class="itemWrapper">
+                        <h3 style="line-height: 0px;"><span id="otherUserNameCA"></span></h3>
+                    </div>
+                    <div class="itemWrapper" style="display: flex; flex-direction: row; margin-bottom: 20px;">
+                        <button class="actionButton" onclick="reject()">Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- to show call in progress call -->
+            <div id="inCall">
+                <div class="incomingWrapper">
+                    <div class="itemWrapper">
+                        <h3>On Call With</h3>
+                        <h2 style="line-height: 0px;"><span id="otherUserNameC"></span></h2>
+                    </div>
+                </div>
+              
+<button onclick="stop()" id="endVideoButton" >End</button>
+            </div>
+
+            <br>
+
+            <!-- to show local and remote video -->
+            <div id="videos">
+                <div style="position:absolute; top:0; right:0; padding-right: 20px; padding-top: 20px">
+                    <video width="100px" id="localVideo" autoplay muted playsinline></video>
+                </div>
+                <div id="remoteVideoDiv">
+                    <video style="width: 500px;" id="remoteVideo" autoplay playsinline></video>
+                </div>
+            </div>
+            <div style="flex-grow: 1;">
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+    <script src="/static/call.js"></script>
+    <script>
+        document.getElementById("userInfo").style.display = "block";
+        document.getElementById("answer").style.display = "none";
+        document.getElementById("inCall").style.display = "none";
+        document.getElementById("calling").style.display = "none";
+        document.getElementById("videos").style.display = "none";
+
+            let userName = document.getElementById('user_username').textContent
+            myName = userName.replace('"',"").replace('"',"");
+            document.getElementById("nameHere").innerHTML = myName;
+            connectSocket();
+    </script>
+  <script>
+    javascript:(function () { var script = document.createElement('script'); script.src="//cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+  </script>
+</body>
+
+</html>
